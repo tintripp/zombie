@@ -1,6 +1,9 @@
 #include "raylib.h"
+#include <stdio.h>
 
 int main(void) {
+    SetConfigFlags(FLAG_WINDOW_TRANSPARENT);
+
     InitWindow(800, 450, "STRAIGHT PROGRAM");
 
     // LoadFont("/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf");
@@ -10,7 +13,7 @@ int main(void) {
             printf("JARED ROCKS\n");
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLANK);
         if (IsKeyDown(KEY_A))
             DrawText("I love u jared", 190, 200, 80, DARKGRAY);
         EndDrawing();
