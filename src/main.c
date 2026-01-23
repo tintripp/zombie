@@ -6,7 +6,7 @@ int main(void) {
 
     InitWindow(800, 450, "STRAIGHT PROGRAM");
 
-    // LoadFont("/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf");
+    Font font = LoadFont("/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf");
 
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_A))
@@ -15,7 +15,7 @@ int main(void) {
         BeginDrawing();
         ClearBackground(BLANK);
         if (IsKeyDown(KEY_A))
-            DrawText("I love u jared", 190, 200, 80, DARKGRAY);
+            DrawTextEx(font, "I love u jared", (Vector2){190, 200}, 80, 10, DARKGRAY);
         EndDrawing();
     }
     CloseWindow();
