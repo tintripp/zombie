@@ -9,6 +9,7 @@ void game_init(Game *game){
     game->state_done = true;
 
     InitWindow(800, 450, "STRAIGHT PROGRAM");
+    SetExitKey(KEY_NULL);
     SetTargetFPS(60);
 
     game->font = LoadFont("res/PixelOperator8-Bold.ttf");
