@@ -5,13 +5,9 @@ WIN_FLAGS=""
 
 RUN=false
 
-BUILD_PATH="bin/"
-
-INPUT="src/*.c"
-OUTPUT="a.out"
+INPUT="$(find src -name '*.c')"
+OUTPUT="a"
 RAYLIB="$HOME/raylib"
-
-mkdir -p "$BUILD_PATH"
 
 # parse arguments
 while [ $# -gt 0 ]; do
@@ -53,22 +49,44 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+#################################################
+
+BUILD_DIR="build/"
+RES="res/"
+
+# create build folder
+mkdir -p "$BUILD_DIR"
+
+# copy resources
+if [ "$WINDOWS" = true ]; then
+    BUILD_DIR="$BUILD_DIR/win32/"
+else
+    BUILD_DIR="$BUILD_DIR/bin/"
+fi
+
+DEST="$BUILD_DIR/$RES"
+
+mkdir -p "$DEST"
+rsync -a --delete "$RES" "$DEST"
+
+#################################################
+
 if [ "$WINDOWS" = true ]; then
     x86_64-w64-mingw32-gcc $INPUT \
         -I"$RAYLIB/src" \
         "$RAYLIB/build-mingw/raylib/libraylib.a" \
         -lopengl32 -lgdi32 -lwinmm $WIN_FLAGS \
-        -o "$BUILD_PATH/$OUTPUT"
+        -o "$BUILD_DIR/$OUTPUT"
 else
     gcc $INPUT \
         -I"$RAYLIB/src" \
         "$RAYLIB/src/libraylib.a" \
         -lGL -lm -lpthread -ldl -lrt -lX11 \
-        -o "$BUILD_PATH/$OUTPUT"
+        -o "$BUILD_DIR/$OUTPUT"
 fi
 
 if [ "$RUN" = true ]; then
-    RUNPATH="$BUILD_PATH/$OUTPUT"
+    RUNPATH="$BUILD_DIR/$OUTPUT"
     if [ "$WINDOWS" = true ]; then
         RUNPATH="$RUNPATH.exe"
     fi
