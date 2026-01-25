@@ -30,5 +30,5 @@ void state_play_do_draw(Game *game, StatePlayData *data) {
     
     DrawRectangle(data->px, data->py, 64, 64, PINK);
 
-    DrawTextEx(game->font, "Welcome to play time!\nBackslash will exit.!", (Vector2){0,0}, 20, 0, WHITE);
+    DrawTextEx(game->font, "Welcome to play time!\nBackslash will exit.!", (Vector2){0,0}, 8, 0, WHITE);
 }

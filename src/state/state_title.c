@@ -23,29 +23,27 @@ void state_title_do_update(Game *game, StateTitleData *data){
 void state_title_do_draw(Game *game, StateTitleData *data){
     ClearBackground(GRAY);
     
-
     {
-        double result = sin(GetTime());
-        double offset = ((result + 1) / 2) * 24;
+        double xoff = ((sin(GetTime()) + 1) / 2) * 8;
+        double yoff = (sin(GetTime()*2)) * 50;
 
         char *msg = "I love u jared";
-        int fontsize = 30;
+        int fontsize = 16;
 
-        Vector2 size = MeasureTextEx(game->font, msg, fontsize, offset);
+        Vector2 size = MeasureTextEx(game->font, msg, fontsize, xoff);
 
         DrawTextEx(
             game->font, 
             msg, 
             (Vector2){
                 (GAME_VSCREEN_WIDTH / 2) - (size.x / 2), 
-                ((sin(GetTime()*2)) * 90) + (GAME_VSCREEN_HEIGHT / 2) - (size.y / 2)
+                (GAME_VSCREEN_HEIGHT / 2) - (size.y / 2) + yoff
             }, 
             fontsize, 
-            offset, 
+            xoff, 
             WHITE
         );
     }
     
-    DrawFPS(0,0);
-
+    DrawTextEx(game->font, TextFormat("%i", GetFPS()), (Vector2){0, 0}, 16, 0, PINK);
 }

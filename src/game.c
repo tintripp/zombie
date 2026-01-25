@@ -92,8 +92,6 @@ void game_do_draw(Game *game){
         if (xmult < ymult) ymult = xmult;
         if (ymult < xmult) xmult = ymult;
 
-        
-
         DrawTexturePro(
             game->vscreen.texture, 
 
