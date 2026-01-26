@@ -1,6 +1,7 @@
 #include "raylib.h"
 
 #include "../game.h"
+#include "../player.h"
 #include "state_title.h"
 #include "state_play.h"
 
@@ -8,36 +9,41 @@
 
 void state_play_enter(Game *game, State *s) {
     StatePlay *data = (StatePlay *)s;
-
-    data->px = 0;
-    data->py = 0;
-    data->pspeed = 120;
+    
+    data->plr = (Player){ 0 };
+    player_init(&data->plr);
 
     printf("Welcome to play time\n");
 }
 void state_play_exit(Game *game, State *s) {
+    StatePlay *data = (StatePlay *)s;
 
+    player_cleanup(&data->plr);
 }
 
 void state_play_do_event(Game *game, State *s) {
+    StatePlay *data = (StatePlay *)s;
     
     if (IsKeyPressed(KEY_BACKSLASH))
         game_request_exit(game);
     if (IsKeyPressed(KEY_ENTER))
         game_state_change(game, state_title());
 
+    player_event(&data->plr);
+
 }
 void state_play_do_update(Game *game, State *s) {
     StatePlay *data = (StatePlay *)s;
 
-    data->px += (IsKeyDown(KEY_D) - IsKeyDown(KEY_A)) * GetFrameTime() * data->pspeed;
-    data->py += (IsKeyDown(KEY_S) - IsKeyDown(KEY_W)) * GetFrameTime() * data->pspeed;
+    player_update(&data->plr);
 }
 void state_play_do_draw(Game *game, State *s) {
     StatePlay *data = (StatePlay *)s;
 
     ClearBackground(BLACK);
-    DrawRectangle(data->px, data->py, 64, 64, PINK);
+
+    player_draw(&data->plr);
+
     DrawTextEx(game->font, "Welcome to play time!\nBackslash will exit.!", (Vector2){0,70}, 8, 0, WHITE);
 }
 

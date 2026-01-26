@@ -1,9 +1,10 @@
 #pragma once
 #include "state.h"
+#include "../player.h"
 
 typedef struct StatePlay {
     State base;
-    double px, py, pspeed;
+    Player plr;
 } StatePlay;
 
 void state_play_enter(Game *game, State *state);
