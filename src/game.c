@@ -20,7 +20,7 @@ void game_init(Game *game){
     game_state_change(game, state_title());
 
 }
-void game_cleanup(Game *game){
+void game_free(Game *game){
     game->state->exit(game, game->state);
     
     UnloadRenderTexture(game->vscreen);
@@ -36,7 +36,7 @@ void game_loop(Game *game){
         game_do_draw(game);
     }
 
-    game_cleanup(game);
+    game_free(game);
 }
 
 void game_do_event(Game *game){

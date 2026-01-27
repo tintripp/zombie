@@ -16,7 +16,7 @@ typedef struct Game {
 } Game;
 
 void game_init(Game *game);
-void game_cleanup(Game *game);
+void game_free(Game *game);
 
 void game_loop(Game *game);
 void game_do_event(Game *game);
