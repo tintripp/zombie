@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "player.h"
-#include "tiles.h"
+#include "tilemap.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -27,7 +27,7 @@ void player_event(Player *player){
     if (IsKeyPressed(KEY_W))
         player->velocity.y = -160;
 }
-void player_update(Player *player, Tiles *tiles){
+void player_update(Player *player, TileMap *tiles){
     player->velocity.x += (
         IsKeyDown(KEY_D) - IsKeyDown(KEY_A)
     ) * player->speed;
@@ -67,7 +67,7 @@ void player_draw(Player *player){
 
 void player_move_axis(
     Player *player, 
-    Tiles *tiles, 
+    TileMap *tiles, 
     float *remainder, 
     float *hitbox_pos, 
     float *velocity, 
@@ -87,7 +87,7 @@ void player_move_axis(
         bool collided = false;
         for (int r = 0; r < tiles->h; r++){
             for (int c = 0; c < tiles->w; c++){
-                TileType tile = tiles_get_at(tiles, r, c);
+                TileType tile = tilemap_get_at(tiles, r, c);
 
                 if (
                     tile == TILE_BRICK &&
@@ -117,7 +117,7 @@ void player_move_axis(
 
 }
 
-void player_move(Player *player, Tiles *tiles, Vector2 dv) {
+void player_move(Player *player, TileMap *tiles, Vector2 dv) {
     player_move_axis(player, tiles, 
         &player->remainder.x, 
         &player->hitbox.x, 

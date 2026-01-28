@@ -10,18 +10,18 @@ typedef enum TileType {
     TILE_SPIKE
 } TileType;
 
-typedef struct Tiles {
-    TileType *arr;
+typedef struct TileMap {
+    TileType *tiles;
     int w, h;
 
     char *json_str;
     cJSON *json;
-} Tiles;
+} TileMap;
 
 // futureproofing, it will return 0 on success
-int tiles_load(Tiles *tiles, const char *filepath); 
+int tilemap_load(TileMap *tilemap, const char *filepath); 
 
-void tiles_free(Tiles *tiles);
-void tiles_draw(Tiles *tiles);
+void tilemap_free(TileMap *tilemap);
+void tilemap_draw(TileMap *tilemap);
 
-TileType tiles_get_at(Tiles *tiles, int row, int col);
+TileType tilemap_get_at(TileMap *tilemap, int row, int col);

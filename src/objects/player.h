@@ -1,6 +1,6 @@
 #pragma once
 #include "raylib.h"
-#include "tiles.h"
+#include "tilemap.h"
 
 typedef enum PlayerDirection {
     PLRDIR_RIGHT = 1,
@@ -26,10 +26,10 @@ void player_init(Player *player);
 void player_free(Player *player);
 
 void player_event(Player *player);
-void player_update(Player *player, Tiles *tiles);
+void player_update(Player *player, TileMap *tiles);
 void player_draw(Player *player);
 
 
 
-void player_move(Player *player, Tiles *tiles, Vector2 dv);
-void player_is_on_ground(Player *player, Tiles *tiles); //todo
+void player_move(Player *player, TileMap *tiles, Vector2 dv);
+void player_is_on_ground(Player *player, TileMap *tiles); //todo

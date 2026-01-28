@@ -1,42 +1,42 @@
 #include "raylib.h"
 #include "../cJSON.h"
-#include "tiles.h"
+#include "tilemap.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-TileType tiles_deduce_type(char *type){
+TileType tilemap_deduce_type(char *type){
     if (strcmp(type, "brick") == 0) return TILE_BRICK;
     if (strcmp(type, "spike") == 0) return TILE_SPIKE;
     return TILE_AIR;    
 }
 
-TileType tiles_get_at(Tiles *tiles, int row, int col){
-    if (row < 0 || row >= tiles->h || col < 0 || col >= tiles->w)
+TileType tilemap_get_at(TileMap *tilemap, int row, int col){
+    if (row < 0 || row >= tilemap->h || col < 0 || col >= tilemap->w)
         return TILE_AIR;
-    return tiles->arr[row * tiles->w + col];
+    return tilemap->tiles[row * tilemap->w + col];
 }
 
-int tiles_load(Tiles *tiles, const char *filepath){
-    tiles->json_str = LoadFileText(filepath);
-    if (!tiles->json_str){
+int tilemap_loadJSON(TileMap *tilemap, const char *filepath){
+    tilemap->json_str = LoadFileText(filepath);
+    if (!tilemap->json_str){
         printf("Could not open the file!!");
         return 1;
     }
 
-    tiles->json = cJSON_Parse(tiles->json_str);
-    if (!tiles->json){
+    tilemap->json = cJSON_Parse(tilemap->json_str);
+    if (!tilemap->json){
         printf("Could not parse the file!! %s", cJSON_GetErrorPtr());
-        free(tiles->json_str);
+        free(tilemap->json_str);
         return 1;
     }
 
-    int width = cJSON_GetObjectItem(tiles->json, "width")->valueint;
-    int height = cJSON_GetObjectItem(tiles->json, "height")->valueint;
+    int width = cJSON_GetObjectItem(tilemap->json, "width")->valueint;
+    int height = cJSON_GetObjectItem(tilemap->json, "height")->valueint;
 
-    TileType *tile_arr = calloc(width * height, sizeof(TileType));
+    TileType *tiles = calloc(width * height, sizeof(TileType));
 
-    cJSON *json_arr = cJSON_GetObjectItem(tiles->json, "tiles");
+    cJSON *json_arr = cJSON_GetObjectItem(tilemap->json, "tiles");
 
     for (int i = 0; i < cJSON_GetArraySize(json_arr); i++){
         cJSON *tile = cJSON_GetArrayItem(json_arr, i);
@@ -49,25 +49,25 @@ int tiles_load(Tiles *tiles, const char *filepath){
         
         //printf("%s\n", type_str);
 
-        tile_arr[r * width + c] = tiles_deduce_type(type_str);
+        tiles[r * width + c] = tilemap_deduce_type(type_str);
     }
 
     // finally, assign.
-    tiles->w = width;
-    tiles->h = height;
-    tiles->arr = tile_arr;
+    tilemap->w = width;
+    tilemap->h = height;
+    tilemap->tiles = tiles;
 
     return 0;
 }
-void tiles_free(Tiles *tiles){
-    cJSON_Delete(tiles->json);
-    free(tiles->json_str);
+void tilemap_free(TileMap *tilemap){
+    cJSON_Delete(tilemap->json);
+    free(tilemap->json_str);
 }
 
-void tiles_draw(Tiles *tiles){
-    for (int r = 0; r < tiles->h; r++){
-        for (int c = 0; c < tiles->w; c++){
-            TileType tile = tiles_get_at(tiles, r, c);
+void tilemap_draw(TileMap *tilemap){
+    for (int r = 0; r < tilemap->h; r++){
+        for (int c = 0; c < tilemap->w; c++){
+            TileType tile = tilemap_get_at(tilemap, r, c);
 
             if (tile == TILE_BRICK)
                 DrawRectangle(

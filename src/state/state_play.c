@@ -14,14 +14,14 @@ void state_play_enter(Game *game, State *s) {
     player_init(&data->plr);
 
     // setup tiles
-    tiles_load(&data->tiles, "res/data/room/test.json");
+    tilemap_loadJSON(&data->tiles, "res/data/room/test.json");
 
     printf("Welcome to play time\n");
 }
 void state_play_exit(Game *game, State *s) {
     StatePlay *data = (StatePlay *)s;
 
-    tiles_free(&data->tiles);
+    tilemap_free(&data->tiles);
     player_free(&data->plr);
 }
 
@@ -46,7 +46,7 @@ void state_play_do_draw(Game *game, State *s) {
 
     ClearBackground(GRAY);
 
-    tiles_draw(&data->tiles);
+    tilemap_draw(&data->tiles);
 
     player_draw(&data->plr);
 
