@@ -13,7 +13,23 @@ TileType tilemap_deduce_type(char *type){
 
 
 TileMap tilemap_tiles_behind(TileMap *tilemap, Rectangle rect){
+    int top = rect.y / TILE_SIZE;
+    int left = rect.x / TILE_SIZE;
+    int bottom = (rect.y + rect.height - 1) / TILE_SIZE;
+    int right = (rect.x + rect.width - 1) / TILE_SIZE;
 
+    int width = right - left + 1;
+    int height = bottom - top + 1;
+
+    TileType *tiles = calloc(width * height, sizeof(TileType));
+
+    for (int r = 0; r < height; r++){
+        for (int c = 0; c < width; c++){
+            tiles[r * width + c] = tilemap_get_at(tilemap, r + top, c + left);
+        }
+    }
+
+    return (TileMap){ .tiles = tiles, .w = width, .h = height };
 }
 
 TileType tilemap_get_at(TileMap *tilemap, int row, int col){
@@ -22,7 +38,7 @@ TileType tilemap_get_at(TileMap *tilemap, int row, int col){
     return tilemap->tiles[row * tilemap->w + col];
 }
 
-int tilemap_loadJSON(TileMap *tilemap, const char *filepath){
+int tilemap_load(TileMap *tilemap, const char *filepath){
     char *json_str = LoadFileText(filepath);
     if (!json_str){
         printf("Could not open the file!!");

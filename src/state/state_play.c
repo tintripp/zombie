@@ -14,7 +14,7 @@ void state_play_enter(Game *game, State *s) {
     player_init(&data->plr);
 
     // setup tiles
-    tilemap_loadJSON(&data->tiles, "res/data/room/test.json");
+    tilemap_load(&data->tiles, "res/data/room/test.json");
 
     printf("Welcome to play time\n");
 }

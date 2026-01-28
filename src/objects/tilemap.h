@@ -17,7 +17,7 @@ typedef struct TileMap {
 } TileMap;
 
 // futureproofing, it will return 0 on success
-int tilemap_loadJSON(TileMap *tilemap, const char *filepath); 
+int tilemap_load(TileMap *tilemap, const char *filepath); 
 
 void tilemap_free(TileMap *tilemap);
 void tilemap_draw(TileMap *tilemap);
