@@ -9,13 +9,17 @@ void game_init(Game *game){
     game->done = false;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(GAME_VSCREEN_WIDTH * 2, GAME_VSCREEN_HEIGHT * 2, GAME_TITLE);
+    InitWindow(
+        GAME_VSCREEN_WIDTH * GAME_INIT_SCALE, 
+        GAME_VSCREEN_HEIGHT * GAME_INIT_SCALE, 
+        GAME_TITLE
+    );
     SetWindowMinSize(GAME_VSCREEN_WIDTH, GAME_VSCREEN_HEIGHT);
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
 
     game->vscreen = LoadRenderTexture(GAME_VSCREEN_WIDTH, GAME_VSCREEN_HEIGHT);
-    game->font = LoadFont("res/PixelOperator8-Bold.ttf");
+    game->font = LoadFont("res/font/PixelOperator8-Bold.ttf");
 
     game_state_change(game, state_title());
 

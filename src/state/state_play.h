@@ -1,10 +1,12 @@
 #pragma once
 #include "state.h"
-#include "../player.h"
+#include "../objects/player.h"
+#include "../objects/tiles.h"
 
 typedef struct StatePlay {
     State base;
     Player plr;
+    Tiles tiles;
 } StatePlay;
 
 void state_play_enter(Game *game, State *state);

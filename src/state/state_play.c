@@ -1,7 +1,7 @@
 #include "raylib.h"
 
 #include "../game.h"
-#include "../player.h"
+#include "../objects/player.h"
 #include "state_title.h"
 #include "state_play.h"
 
@@ -13,12 +13,16 @@ void state_play_enter(Game *game, State *s) {
     data->plr = (Player){ 0 };
     player_init(&data->plr);
 
+    // setup tiles
+    tiles_load(&data->tiles, "res/data/room/test.json");
+
     printf("Welcome to play time\n");
 }
 void state_play_exit(Game *game, State *s) {
     StatePlay *data = (StatePlay *)s;
 
-    player_cleanup(&data->plr);
+    tiles_free(&data->tiles);
+    player_free(&data->plr);
 }
 
 void state_play_do_event(Game *game, State *s) {
@@ -35,12 +39,14 @@ void state_play_do_event(Game *game, State *s) {
 void state_play_do_update(Game *game, State *s) {
     StatePlay *data = (StatePlay *)s;
 
-    player_update(&data->plr);
+    player_update(&data->plr, &data->tiles);
 }
 void state_play_do_draw(Game *game, State *s) {
     StatePlay *data = (StatePlay *)s;
 
-    ClearBackground(BLACK);
+    ClearBackground(GRAY);
+
+    tiles_draw(&data->tiles);
 
     player_draw(&data->plr);
 

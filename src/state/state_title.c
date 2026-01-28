@@ -30,7 +30,7 @@ void state_title_do_update(Game *game, State *state){
 void state_title_do_draw(Game *game, State *state){
     StateTitle *data = (StateTitle *)state;
 
-    ClearBackground(GRAY);
+    ClearBackground(DARKGRAY);
     
     {
         double xoff = sin(data->time_elapsed + 1) / 2 * 8;
