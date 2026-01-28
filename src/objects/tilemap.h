@@ -22,5 +22,4 @@ int tilemap_load(TileMap *tilemap, const char *filepath);
 void tilemap_free(TileMap *tilemap);
 void tilemap_draw(TileMap *tilemap);
 
-TileMap tilemap_tiles_behind(TileMap *tilemap, Rectangle rect);
 TileType tilemap_get_at(TileMap *tilemap, int row, int col);

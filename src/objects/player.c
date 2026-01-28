@@ -27,7 +27,7 @@ void player_event(Player *player){
     if (IsKeyPressed(KEY_W))
         player->velocity.y = -160;
 }
-void player_update(Player *player, TileMap *tiles){
+void player_update(Player *player, TileMap *tilemap){
     player->velocity.x += (
         IsKeyDown(KEY_D) - IsKeyDown(KEY_A)
     ) * player->speed;
@@ -40,7 +40,7 @@ void player_update(Player *player, TileMap *tiles){
     //gravity
     player->velocity.y += 360 * GetFrameTime();
     
-    player_move(player, tiles, Vector2Scale(player->velocity, GetFrameTime()));
+    player_move(player, tilemap, Vector2Scale(player->velocity, GetFrameTime()));
 }
 void player_draw(Player *player){
     if (!round(player->velocity.x)){
@@ -67,7 +67,7 @@ void player_draw(Player *player){
 
 void player_move_axis(
     Player *player, 
-    TileMap *tiles, 
+    TileMap *tilemap, 
     float *remainder, 
     float *hitbox_pos, 
     float *velocity, 
@@ -83,19 +83,26 @@ void player_move_axis(
         *hitbox_pos += sign;
 
         // this loops through every tile.. 
-        // make a function to find only tiles the hitbox is in.
+        // make a function to find only tilemap the hitbox is in.
         bool collided = false;
-        for (int r = 0; r < tiles->h; r++){
-            for (int c = 0; c < tiles->w; c++){
-                TileType tile = tilemap_get_at(tiles, r, c);
+        for (int r = 0; r < tilemap->h; r++){
+            for (int c = 0; c < tilemap->w; c++){
+                TileType tile = tilemap_get_at(tilemap, r, c);
 
+                /*
+                TODO: we know for a fact that tiles are either solid or they aren't
+                so, just loop over what tiles our hitbox resides in:
+                If we are in a solid tile, stop!
+                */
                 if (
                     tile == TILE_BRICK &&
                     CheckCollisionRecs(
                     player->hitbox,
                     (Rectangle){
-                        c * TILE_SIZE, r * TILE_SIZE,
-                        TILE_SIZE, TILE_SIZE,
+                        c * TILE_SIZE, 
+                        r * TILE_SIZE,
+                        TILE_SIZE, 
+                        TILE_SIZE,
                     }
                 )) {
                     collided = true;
@@ -117,14 +124,14 @@ void player_move_axis(
 
 }
 
-void player_move(Player *player, TileMap *tiles, Vector2 dv) {
-    player_move_axis(player, tiles, 
+void player_move(Player *player, TileMap *tilemap, Vector2 dv) {
+    player_move_axis(player, tilemap, 
         &player->remainder.x, 
         &player->hitbox.x, 
         &player->velocity.x, 
         dv.x
     );
-    player_move_axis(player, tiles, 
+    player_move_axis(player, tilemap, 
         &player->remainder.y, 
         &player->hitbox.y, 
         &player->velocity.y, 
